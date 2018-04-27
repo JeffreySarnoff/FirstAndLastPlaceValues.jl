@@ -29,8 +29,8 @@ ulp(x::T) where {T<:IEEEFloat} = ufp(x) * ulp(T)
 function ulps(reference_value::T, investigative_value::T) where {T<:AbstractFloat}
     half_separation = abs(reference_value - investigative_value)/2
     reference_ulp = ulp(reference_value)
-    relative_ulp  = half_separation / reference_ulp
-    iszero(relative_ulp) ? abs(relative_ulp) : relative_ulp    # nonegative zeros
+    relative_ulps  = round(Int, half_separation / reference_ulp)
+    return relative_ulps 
 end
 
 
