@@ -4,7 +4,7 @@ export ufp, ulp, ulps
 
 import Base: IEEEFloat, prevfloat
 
-prevfloat(x::T, n::Int) = -nextfloat(-x, n)
+prevfloat(x::T, n::Int) where {T<:AbstractFloat} = -nextfloat(-x, n)
 
 # nominal `ulp` values for IEEEFloat Types
 ulp(::Type{T}) where {T<:IEEEFloat} =
