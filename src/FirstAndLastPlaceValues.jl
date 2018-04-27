@@ -23,13 +23,15 @@ end
 ulp(x::T) where {T<:IEEEFloat} = ufp(x) * ulp(T)
 
 #=
-     let  n = ulps( refval, obsval )
+     let  n = binade_ulps( refval, obsval ) 
+          where obsval is in the same binad as refval
      then nextfloat(min(refval, obsval), n) == max(refval, obsval)
 =#     
-function ulps(reference_value::T, investigative_value::T) where {T<:AbstractFloat}
-    half_separation = abs(reference_value - investigative_value)/2
+function binade_ulps(reference_value::T, investigative_value::T) where {T<:AbstractFloat}
+    distance = reference_value - investigative_value
+    separation = signbit(distance) ? abs(distance)/2 : distance
     reference_ulp = ulp(reference_value)
-    relative_ulps  = round(Int, half_separation / reference_ulp)
+    relative_ulps  = round(Int, separation / reference_ulp)
     return relative_ulps 
 end
 
