@@ -2,8 +2,9 @@ module FirstAndLastPlaceValues
 
 export ufp, ulp, ulps
 
-import Base.IEEEFloat
+import Base: IEEEFloat, prevfloat
 
+prevfloat(x::T, n::Int) = -nextfloat(-x, n)
 
 # nominal `ulp` values for IEEEFloat Types
 ulp(::Type{T}) where {T<:IEEEFloat} =
@@ -26,9 +27,9 @@ ulp(x::T) where {T<:IEEEFloat} = ufp(x) * ulp(T)
      then nextfloat(min(refval, obsval), n) == max(refval, obsval)
 =#     
 function ulps(reference_value::T, investigative_value::T) where {T<:AbstractFloat}
-    separation = abs(reference_value - investigative_value)
+    half_separation = abs(reference_value - investigative_value)/2
     reference_ulp = ulp(reference_value)
-    relative_ulp  = separation / reference_ulp
+    relative_ulp  = half_separation / reference_ulp
     iszero(relative_ulp) ? abs(relative_ulp) : relative_ulp    # nonegative zeros
 end
 
