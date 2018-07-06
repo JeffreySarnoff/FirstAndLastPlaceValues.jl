@@ -7,8 +7,10 @@ import Base: IEEEFloat, prevfloat
 prevfloat(x::T, n::Int) where {T<:AbstractFloat} = -nextfloat(-x, n)
 
 # nominal `ulp` values for IEEEFloat Types
+const NominalSignificand = 0.5 # or 1.0 (per paper)
+
 ulp(::Type{T}) where {T<:IEEEFloat} =
-    inv(ldexp(1.0, precision(T)))
+    inv(ldexp(NominalSignificand, precision(T)))
 
 
 # actual `ufp` (unit first place) values for IEEEFloats 
