@@ -5,9 +5,9 @@ export ufp, ulp
 # ufp is "unit first place"
 # ufp(x::T) where {T<:IEEEFloat} = x !== zero(T) ? ldexp(one(T), exponent(x)) : x
 
-ufp(x::Float64) = x !== 0.0 ? ldexp(1.0, exponent(x)) : x
-ufp(x::Float32) = x !== 0.0 ? ldexp(1.0f0, exponent(x)) : x
-ufp(x::Float16) = x !== 0.0 ? ldexp(one(Float16), exponent(x)) : x
+ufp(x::Float64) = x !== 0.0 ? ldexp(1.0, exponent(x)) : 0.0
+ufp(x::Float32) = x !== 0.0 ? ldexp(1.0f0, exponent(x)) : 0.0f0
+ufp(x::Float16) = x !== 0.0 ? ldexp(one(Float16), exponent(x)) : zero(Float16)
 
 
 # ulp is "unit last place"
