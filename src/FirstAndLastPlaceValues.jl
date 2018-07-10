@@ -2,15 +2,9 @@ module FirstAndLastPlaceValues
 
 export ufp, ulp
 
-import Base: IEEEFloat, prevfloat
-
-if !hasmethod(prevfloat, (Float64, Int))
-    prevfloat(x::T, n::Int) where {T<:AbstractFloat} = -nextfloat(-x, n)
-end
-
 # ufp is "unit first place"
+# ufp(x::T) where {T<:IEEEFloat} = x !== zero(T) ? ldexp(one(T), exponent(x)) : x
 
-ufp(x::T) where {T<:IEEEFloat} = x !== zero(T) ? ldexp(one(T), exponent(x)) : x
 ufp(x::Float64) = x !== 0.0 ? ldexp(1.0, exponent(x)) : x
 ufp(x::Float32) = x !== 0.0 ? ldexp(1.0f0, exponent(x)) : x
 ufp(x::Float16) = x !== 0.0 ? ldexp(one(Float16), exponent(x)) : x
@@ -31,6 +25,11 @@ ulp(x::Float16) = x !== Float16(0.0) ? ulp_Float16 * ldexp(one(Float16), exponen
 
 
 #=
+
+
+if !hasmethod(prevfloat, (Float64, Int))
+    Base.prevfloat(x::T, n::Int) where {T<:AbstractFloat} = -nextfloat(-x, n)
+end
 
 # 𝐮 is the relative rounding error unit
 # 𝐮 is half the distance between 1.0 and its successor
