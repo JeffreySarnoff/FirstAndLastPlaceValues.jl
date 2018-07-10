@@ -1,10 +1,23 @@
 module FirstAndLastPlaceValues
 
-export ufp, ulp, ulps
+export ufp, ulp, ulps,
+       rreu, 𝐮           # relative rounding error unit: 𝐮 (\bfu), 𝐮(T) == 2.0^(-precision(T))
+       subnmin, η        # minimum positive subnormal:   η (\eta), η(T)
 
 import Base: IEEEFloat, prevfloat
 
 prevfloat(x::T, n::Int) where {T<:AbstractFloat} = -nextfloat(-x, n)
+
+𝐮(::Type{Float64}) = ldexp(1.0, -precision(Float64))
+𝐮(::Type{Float32}) = ldexp(1.0, -precision(Float32))
+𝐮(::Type{Float16}) = ldexp(1.0, -precision(Float16))
+
+η(::Type{Float64}) =  ldexp(0.5, -1073)
+η(::Type{Float32}) =  ldexp(0.5, -148)
+η(::Type{Float16}) =  ldexp(0.5, -23)
+
+const rreu = 𝐮
+const subnmin = η
 
 # nominal `ulp` values for IEEEFloat Types
 const NominalSignificand = 0.5 # or 1.0 (per paper)
