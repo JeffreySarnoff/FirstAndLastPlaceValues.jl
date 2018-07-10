@@ -1,23 +1,54 @@
 module FirstAndLastPlaceValues
 
-export ufp, ulp, ulps,
-       rreu, 𝐮           # relative rounding error unit: 𝐮 (\bfu), 𝐮(T) == 2.0^(-precision(T))
-       subnmin, η        # minimum positive subnormal:   η (\eta), η(T)
+export ufp, ulp
 
 import Base: IEEEFloat, prevfloat
 
-prevfloat(x::T, n::Int) where {T<:AbstractFloat} = -nextfloat(-x, n)
+if !hasmethod(prevfloat, (Float64, Int))
+    prevfloat(x::T, n::Int) where {T<:AbstractFloat} = -nextfloat(-x, n)
+end
 
-𝐮(::Type{Float64}) = ldexp(1.0, -precision(Float64))
-𝐮(::Type{Float32}) = ldexp(1.0, -precision(Float32))
-𝐮(::Type{Float16}) = ldexp(1.0, -precision(Float16))
+# ufp is "unit first place"
 
-η(::Type{Float64}) =  ldexp(0.5, -1073)
-η(::Type{Float32}) =  ldexp(0.5, -148)
-η(::Type{Float16}) =  ldexp(0.5, -23)
+ufp(x::T) where {T<:IEEEFloat} = x !== zero(T) ? ldexp(one(T), exponent(x)) : x
+ufp(x::Float64) = x !== 0.0 ? ldexp(1.0, exponent(x)) : x
+ufp(x::Float32) = x !== 0.0 ? ldexp(1.0f0, exponent(x)) : x
+ufp(x::Float16) = x !== 0.0 ? ldexp(one(Float16), exponent(x)) : x
 
-const rreu = 𝐮
-const subnmin = η
+
+# ulp is "unit last place"
+# ulp(T) == ulp(one(T)) == ldexp(one(T), 1-precision(T))
+
+const ulp_Float64 = ldexp(1.0, -52)
+const ulp_Float32 = ldexp(1.0f0, -23)
+const ulp_Float16 = ldexp(one(Float16), -10)
+
+# acutal `ulp` (unit last place) values for IEEEFloats
+
+ulp(x::Float64) = x !== 0.0 ? ulp_Float64 * ldexp(1.0, exponent(x)) : 0.0
+ulp(x::Float32) = x !== 0.0f0 ? ulp_Float32 * ldexp(1.0f0, exponent(x)) : 0.0f0
+ulp(x::Float16) = x !== Float16(0.0) ? ulp_Float16 * ldexp(one(Float16), exponent(x)) : zero(Float16)
+
+
+#=
+
+# 𝐮 is the relative rounding error unit
+# 𝐮 is half the distance between 1.0 and its successor
+# 𝐮 == (nextfloat(1.0) - 1.0) / 2 == eps(1.0) / 2
+# 𝐮(T) == ldexp(one(T), -precision(T))
+
+const 𝐮_Float64 = ldexp(1.0, -precision(Float64))
+const 𝐮_Float32 = ldexp(1.0f0, -precision(Float32))
+const 𝐮_Float16 = ldexp(one(Float16), -precision(Float16))
+
+# 𝛈 is the smallest subnormal
+# 𝛈 == nextfloat(0.0)
+
+const 𝛈_Float64 =  ldexp(1.0, -1074)
+const 𝛈_Float32 =  ldexp(1.0f0, -149)
+const 𝛈_Float16 =  ldexp(one(Float16), -24)
+
+
 
 # nominal `ulp` values for IEEEFloat Types
 const NominalSignificand = 0.5 # or 1.0 (per paper)
@@ -34,8 +65,6 @@ function ufp(x::T) where {T<:IEEEFloat}
     return reinterpret(T, u)
 end
 
-# acutal `ulp` (unit last place) values for IEEEFloats
-ulp(x::T) where {T<:IEEEFloat} = ufp(x) * ulp(T)
 
 #=
      let  n = binade_ulps( refval, obsval ) 
@@ -58,5 +87,5 @@ end
 ulp(x::BigFloat) = eps(x)/2
 ufp(x::BigFloat) = ulp(x) * frexp(1.0, precision(x))
 
-
+=#
 end # FirstAndLastPlaceValues
