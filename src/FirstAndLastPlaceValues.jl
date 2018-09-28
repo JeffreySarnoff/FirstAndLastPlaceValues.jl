@@ -86,6 +86,27 @@ end
 
 
 
+ulp(::Type{T}) where {T<:AbstractFloat} = two(T) * ε⁻(T)
+
+ulp(::Type{Float64}) = 2.220446049250313e-16
+ulp(::Type{Float32}) = 1.1920929f-7
+ulp(::Type{Float16}) = Float16(0.000977)
+
+
+ulp(::Type{Float64}) = 2.220446049250313e-16
+ulp(::Type{Float32}) = 1.1920929f-7
+ulp(::Type{Float16}) = Float16(0.000977)
+
+ulp(x::T) where {T<:AbstractFloat} = two(T) * ε⁻(T) * ufp(x)
+ulp(x::T) where {T<:AbstractFloat} = ε⁺(T) * ufp(x)
+
+ulp(x::Float64) = 2.220446049250313e-16 * ufp(x)
+ulp(x::Float32) = 1.1920929f-7 * ufp(x)
+ulp(x::Float16) = Float16(0.000977) * ufp(x)
+
+
+
+
 
 
 
