@@ -13,7 +13,11 @@ Fast quadruple-double floating point format
     Naoya Yamanaka and Shin’ichi Oishi
     2014-Jan-01
 
+ERROR ESTIMATION OF FLOATING-POINT SUMMATION AND DOT PRODUCT
+SIEGFRIED M. RUMP
 
+On the definition of ulp (x)
+Jean-Michel Muller
 =#
 
 two(::Type{T}) where {T<:Real} = one(T) + one(T)
