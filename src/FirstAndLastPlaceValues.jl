@@ -1,12 +1,37 @@
 module FirstAndLastPlaceValues
 
-export ufp, ulp, rre
+export ufp, ulp, rre, ε⁻, ε⁺
 
 #=
+
+ACCURATE FLOATING-POINT SUMMATION PART I: FAITHFUL ROUNDING
+SIEGFRIED M. RUMP, TAKESHI OGITA, AND SHIN’ICHI OISHI
+    http://oishi.info.waseda.ac.jp/~oishi/papers/RuOgOi07I.pdf
+
+
 Fast quadruple-double floating point format
     Naoya Yamanaka and Shin’ichi Oishi
     2014-Jan-01
+
+
 =#
+
+#=
+  epsilon (ε)
+  ε⁻(T) = (one(T) - prevfloat(one(T)))
+  ε⁺(T) = (nextfloat(one(T)) - one(T))
+=#
+ε⁻(::Type{T}) where {T<:AbstractFloat} = (one(T) - prevfloat(one(T)))
+ε⁺(::Type{T}) where {T<:AbstractFloat} = (nextfloat(one(T)) - one(T))
+
+ε⁻(::Type{Float64}) = 1.1102230246251565e-16
+ε⁻(::Type{Float32}) = 5.9604645f-8
+ε⁻(::Type{Float16}) = Float16(0.0004883)
+
+ε⁺(::Type{Float64}) = 2.220446049250313e-16
+ε⁺(::Type{Float32}) = 1.1920929f-7
+ε⁺(::Type{Float16}) = Float16(0.000977)
+
 
 #=
   relative rounding error (rre)
