@@ -1,6 +1,59 @@
 module FirstAndLastPlaceValues
 
-export ufp, ulp
+export ufp, ulp, rre
+
+#=
+Fast quadruple-double floating point format
+    Naoya Yamanaka and Shin’ichi Oishi
+    2014-Jan-01
+=#
+
+#=
+  relative rounding error (rre)
+  rre(T) = (nextfloat(one(T)) - one(T)) / (one(T) + one(T))
+  rre(T) = eps(T) / 2
+=#
+
+rre(::Type{Float64}) = 1.1102230246251565e-16
+rre(::Type{Float32}) = 1.1920929f-7
+rre(::Type{Float16}) = Float16(0.000977)
+
+rre(::Type{T}) where {T<:AbstractFloat} = 
+    (nextfloat(one(T)) - one(T)) / (one(T) + one(T))
+
+#=
+the unsigned constants used in `ufp(x::T)`
+     Float64: ((~UInt64(0)) >> 52) << 52
+     Float32: ((~UInt32(0)) >> 23) << 23
+     Float16: ((~UInt16(0)) >> 10) << 10
+
+the shifts: Base.trailing_ones(Base.significand_mask)
+=#
+     
+ufp(x::Float64) =
+    reinterpret(Float64, 
+        reinterpret(UInt64, x) & 0xfff0000000000000)  
+        
+ufp(x::Float32) =
+    reinterpret(Float32, 
+        reinterpret(UInt32, x) & 0xff800000)
+
+ufp(x::Float16) =
+    reinterpret(Float16, 
+        reinterpret(UInt16, x) & 0xfc00)
+
+inv2rre(::Type{T}) where {T<:AbstractFloat} =
+    inv(rre(T)+rre(T)) + one(T)
+
+function ufp(x::T) where {T<:AbstractFloat}
+    q = inv2rre(T) * x
+    return q - (one(T) - rre(T))
+end
+
+
+
+
+
 
 # ufp is "unit first place"
 # ufp(x::T) where {T<:IEEEFloat} = x !== zero(T) ? ldexp(one(T), exponent(x)) : x
