@@ -22,6 +22,13 @@ rre(::Type{T}) where {T<:AbstractFloat} =
     (nextfloat(one(T)) - one(T)) / (one(T) + one(T))
 
 #=
+inv2rre(T) = 1/eps(T)
+=#
+inv2rre(::Type{T}) where {T<:AbstractFloat} =
+    inv((one(T)+one(T))*rre(T)) + one(T)
+
+
+#=
 the unsigned constants used in `ufp(x::T)`
      Float64: ((~UInt64(0)) >> 52) << 52
      Float32: ((~UInt32(0)) >> 23) << 23
@@ -41,9 +48,6 @@ ufp(x::Float32) =
 ufp(x::Float16) =
     reinterpret(Float16, 
         reinterpret(UInt16, x) & 0xfc00)
-
-inv2rre(::Type{T}) where {T<:AbstractFloat} =
-    inv(rre(T)+rre(T)) + one(T)
 
 function ufp(x::T) where {T<:AbstractFloat}
     q = inv2rre(T) * x
