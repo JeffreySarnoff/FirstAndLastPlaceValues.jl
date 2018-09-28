@@ -3,20 +3,20 @@ module FirstAndLastPlaceValues
 export ufp, ulp, rre, ε⁻, ε⁺
 
 #=
+References
 
-ACCURATE FLOATING-POINT SUMMATION PART I: FAITHFUL ROUNDING
-SIEGFRIED M. RUMP, TAKESHI OGITA, AND SHIN’ICHI OISHI
-    http://oishi.info.waseda.ac.jp/~oishi/papers/RuOgOi07I.pdf
-
+Accurate Floating-Point Summation Part I: Faithful Rounding
+Siegfried M. Rump, Takeshi Ogita and Shin'ichi Oishi
+http://oishi.info.waseda.ac.jp/~oishi/papers/RuOgOi07I.pdf
 
 Fast quadruple-double floating point format
-    Naoya Yamanaka and Shin’ichi Oishi
-    2014-Jan-01
+Naoya Yamanaka and Shin’ichi Oishi
+2014-Jan-01
 
-ERROR ESTIMATION OF FLOATING-POINT SUMMATION AND DOT PRODUCT
-SIEGFRIED M. RUMP
+Error Estimation of Floating-Point Summation and Dot Product
+Siegfried M. Rump
 
-On the definition of ulp (x)
+On the definition of ulp(x)
 Jean-Michel Muller
 =#
 
