@@ -1,6 +1,6 @@
 module FirstAndLastPlaceValues
 
-export ufp, ulp, rre, ε⁻, ε⁺
+export ufp, ulp, rre, ε⁻, ε⁺, eta
 
 #=
 References
@@ -24,6 +24,18 @@ two(::Type{T}) where {T<:Real} = one(T) + one(T)
 two(::Type{Float64}) = 2.0
 two(::Type{Float32}) = 2.0f0
 two(::Type{Float16}) = Float16(2.0)
+
+
+#=
+eta is the smallest positive (nonzero, denormal)
+eta(T) = nextfloat(zero(T))
+=#
+eta(::Type{T}) where {T<:AbstractFloat} = nextfloat(zero(T))
+
+eta(::Type{Float64}) = 5.0e-324
+eta(::Type{Float32}) = 1.0f-45
+eta(::Type{Float16}) = Float16(6.0e-8)
+
 
 #=
   epsilon (ε)
