@@ -75,6 +75,14 @@ inv2rre(::Type{T}) where {T<:AbstractFloat} =
 
 
 #=
+ufp(x) unit in the first place of x
+
+ufp(zero(T)) ≝ zero(T)
+
+ufp(x::T) ≝ 2^floor(Int, log2(abs(x)))
+          ≡ ldexp(one(T), floor(Int,log2(abs(x))))
+
+
 the unsigned constants used in `ufp(x::T)`
      Float64: ((~UInt64(0)) >> 52) << 52
      Float32: ((~UInt32(0)) >> 23) << 23
