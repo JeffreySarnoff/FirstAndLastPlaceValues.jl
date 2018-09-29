@@ -18,6 +18,12 @@ Siegfried M. Rump
 
 On the definition of ulp(x)
 Jean-Michel Muller
+
+Computing predecessor and successor in rounding to nearest
+Siegfried Rump, Paul Zimmermann, Sylvie Boldo, Guillaume Melquiond
+
+On various ways to split a floating-point number
+Claude-Pierre Jeannerod, Jean-Michel Muller, Paul Zimmermann
 =#
 
 two(::Type{T}) where {T<:Real} = one(T) + one(T)
