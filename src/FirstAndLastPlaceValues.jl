@@ -109,11 +109,12 @@ ufp(x::Float16) =
     reinterpret(Float16, 
         reinterpret(UInt16, x) & 0xfc00)
 
+#= maybe wrong
 function ufp(x::T) where {T<:AbstractFloat}
     q = inv2rre(T) * x
     return q - (one(T) - rre(T))
 end
-
+=#
 
 
 ulp(::Type{T}) where {T<:AbstractFloat} = two(T) * ε⁻(T)
