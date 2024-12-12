@@ -58,10 +58,23 @@ ufp(x::Real)  unit in the first place
               !iszero(x):  ufp(x) <= abs(x) < 2 * ufp(x)
               this definition is indpendent of some floating-point format.
 
-where fp is a normalized floating-point number
-    sigma = ufp(fp)
-
+      The smallest postive subnormal floating-point number ris 2^Emin, denoted by subrealmin
       The smallest positive normalized floating-point number is eta / (2 * eps)
+
+      const predecessor_one = 1 - subrealmin  # prevfloat(one(T))
+      const phi = 2^(precision-1) + 1         # 2^fracbits + 1
+        Emin <= -1 < p <= Emax, |fp| < 2^(Emax - p + 1), roundToZero OR roundDown
+
+      function ufp(fp, p, 2)
+         q = phi * abs(fp)
+         q - predecessor_one * q      #   ufp(fp) = q * (1 - predecessor_one)
+                                      #   ufp(fp) = abs(fp) * phi * (1 - predecessor_one)
+                                      #   ufp(fp) / abs(fp) = phi * (1 - predecessor_one)
+                                      #   ufp(fp) / abs(fp) = (2^fracbits + 1) * (1 - predecessor_one)
+                                      #   ufp(fp) / abs(fp) = (1 + 2^fracbits) * (1 - predecessor_one)
+                                      #   ufp(fp) / abs(fp) = (1 - predecessor_one) + (2^fracbits * (1 - predecessor_one))
+                                      #   ufp(fp) / abs(fp) = (1 - predecessor_one) + (2^fracbits - (2^fracbits * predecessor_one)))
+
 
       eta = 1 / (2 * eps) 
       The distance from 1.0 to the next smaller floating-point number, is denoted by eps
