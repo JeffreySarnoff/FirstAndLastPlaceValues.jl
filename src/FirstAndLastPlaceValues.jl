@@ -73,6 +73,45 @@ where fp is a normalized floating-point number
 ulp(x)  unit in the last place
             the weight of the least significant bit
 
+        from Muller on the definition of ulp(x)
+        Conclusion (definition 5)
+          If x is a real number that lies between two finite consecutive FP numbers
+          a and b, without being equal to one of them, then ulp (x) = |b - a|, 
+          otherwise ulp (x) is the distance between the two finite FP numbers nearest x. 
+          Moreover, ulp (NaN) is NaN.
+
+          x::Real              fl(x) != x
+          a::MachineFloat      isfinite(a)    a < x
+          b::MachineFloat      isfinite(b)    x < b
+                                              a < x < b
+                                              of all fl(_) a, b are two machine floats nearest to x
+                                              R(a) preceeds x , R(b) suceeds x
+                                              R(a) < x < R(b)
+                                              a <= fl(x) <= b
+                                                                a == fl(x) && fl(x) != b
+                                                                a != fl(x) && fl(x) == b
+
+          Define L as the largest finite FP number, and L- as its predecessor
+          If x is larger than L then KahanUlp(x) = L - L-
+                                    | X - x | < (1/2) KahanUlp(x)  ==>  X = roundNearest(x)
+          HOWEVER IEEE 754 says 
+            an infinitely precise reesult with magnitude at least
+            2^emax * (2 - 2^(-n))
+            shall round to infinity with no change in sign.
+            With this converntion, if X is finite, in radix 2
+                X = roundNearesst(c) ==> |X - x| <= (1/2)KahanUlp(x)
+                                         |X - x| <  (1/2)HarrisonUlp(x) ==> X = roundNearest(x)
+                HarrisonUlp(x) = b - a where a != b and a,b are the closest straddling points (a < x < b)
+                                (assumes unbounded exponent range)
+                KahanUlp (x) is the width of the interval whose endpoints are the two finite representable
+                    numbers nearest x (even if x is not contained within that interval).
+
+
+
+
+          and !exists m::MachineFloat such that  a < m < b
+        
+
 uls(x)  unit in the last significant place
               the weight of the rightmost nonzero bit
               the largest power of 2 that divides x
