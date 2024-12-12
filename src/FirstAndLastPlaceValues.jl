@@ -46,22 +46,49 @@ two(::Type{Float16}) = Float16(2.0)
 =#
 
 #=
-  ufp(x)  unit in the first place
-              the weight of the most significant bit
-  ulp(x)  unit in the last place
-              the weight of the least significant bit
-  uls(x)  unit in the last significant place
+beta == base == 2
+
+ufp(x::Real)  unit in the first place
+              ufp(0) := 0                              iszero(x)
+              ufp(x) := 2^floor(log2(abs(x)))          !iszero(x)
+
+              ufp(x) is the weight of the most significant bit in the representation of x.
+                                          first nonzero `digit` of x in its base beta representation.
+
+              !iszero(x):  ufp(x) <= abs(x) < 2 * ufp(x)
+              this definition is indpendent of some floating-point format.
+
+where fp is a normalized floating-point number
+    sigma = ufp(fp)
+
+      The smallest positive normalized floating-point number is eta / (2 * eps)
+
+      eta = 1 / (2 * eps) 
+      The distance from 1.0 to the next smaller floating-point number, is denoted by eps
+      eps = 1 / (2 * eta)
+
+      For IEEE 754 double precision we have eps = 2^(−53) and eta = 2^(−1074).
+
+
+ulp(x)  unit in the last place
+            the weight of the least significant bit
+
+uls(x)  unit in the last significant place
               the weight of the rightmost nonzero bit
               the largest power of 2 that divides x
               the largest k s.t. x / 2^k is an integer
   
-  reu(T)  roundoff error unit
+blp(x)  bit in the last place:              ulp(x) == 2.0^blp(x)
+bfp(x)  bit in the first place:             ufp(x) == 2.0^bfp(x)
+bls(x)  bit in the last significant place:  uls(x) == 2.0^bls(x)
+
+
+reu(T)  roundoff error unit === eps(T
              2^(-precision)
              ulp(1) / 2
              
-  blp(x)  bit in the last place:              ulp(x) == 2.0^blp(x)
-  bfp(x)  bit in the first place:             ufp(x) == 2.0^bfp(x)
-  bls(x)  bit in the last significant place:  uls(x) == 2.0^bls(x)
+    The relative rounding error unit (reu) , 
+
 =#
 #=
 julia> x = cbrt(17*pi)        #  3.765878158314341
