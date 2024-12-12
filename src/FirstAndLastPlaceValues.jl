@@ -223,7 +223,7 @@ blp(x) = round(Int, log2(ulp(x)))
 bls(x) = round(Int, log2(uls(x)))
 
 # for x <= sqrt(floatmax(T)) !! bounds need testing
-fast_ufp(x::Float64) = reinterpret(Float64, reinterpret(UInt64, x) & 0xfff0000000000000)
+fast_ufp(x::Float64) = reinterpret(Float64, reinterpret(UInt64, x) & 0xfff0_000_000_000_000)
 fast_ufp(x::Float32) = reinterpret(Float32, reinterpret(UInt32, x) & 0xfff0_0000)
 fast_ufp(x::Float16) = reinterpret(Float16, reinterpret(UInt16, x) & 0xfff0)
 
