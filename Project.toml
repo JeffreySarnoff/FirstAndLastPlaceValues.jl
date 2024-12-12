@@ -1,0 +1,8 @@
+name = "FirstAndLastPlaceValues"
+author = "Jeffrey Sarnoff <jeffrey.sarnoff@gmail.com>"
+uuid = "dd8a906a-23bc-4472-934d-9c54f090218b"
+version = "0.1.0"
+
+[compat]
+julia = "1.11"
+
