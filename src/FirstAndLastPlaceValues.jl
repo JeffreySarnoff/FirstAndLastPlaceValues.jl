@@ -58,6 +58,18 @@ ufp(x::Real)  unit in the first place
               !iszero(x):  ufp(x) <= abs(x) < 2 * ufp(x)
               this definition is indpendent of some floating-point format.
 
+      ufp(fp::T) where T = signbit(fp) ? ufp_abs(abs(fp)) : ufp_abs(fp)
+      function ufp_abs(fp::T) where T
+            twopow_fractionbits =  # lookup table T => 2.0^(precision(T) - 1)
+            fp_scaled = fp * twopow_fractionbits
+            succ(fp_scaled) - fp_scaled
+      end                      
+
+      function ufp(fp, precision)
+          scaled_fp = abs(fp) * 2^(precision - 1)    # ldexp(precision - 1, abs(fp))
+          succ(scaled_fp) - scaled_fp
+      end
+
       function ufp(fp, precision)
           scaled_fp = abs(fp) * 2^(precision - 1)    # ldexp(precision - 1, abs(fp))
           succ(scaled_fp) - scaled_fp
