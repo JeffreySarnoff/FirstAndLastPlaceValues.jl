@@ -2,6 +2,10 @@ module FirstAndLastPlaceValues
 
 export ufp, ulp, uls, rre, ε⁻, ε⁺, eta
 
+using Quadmath
+!isdefined(Main, :Quadmath) 
+
+
 #=
 References
 
