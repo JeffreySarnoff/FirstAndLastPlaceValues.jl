@@ -58,12 +58,20 @@ ufp(x::Real)  unit in the first place
               !iszero(x):  ufp(x) <= abs(x) < 2 * ufp(x)
               this definition is indpendent of some floating-point format.
 
+      function ufp(fp, precision)
+          scaled_fp = abs(fp) * 2^(precision - 1)    # ldexp(precision - 1, abs(fp))
+          succ(scaled_fp) - scaled_fp
+      end
+
       The smallest postive subnormal floating-point number ris 2^Emin, denoted by subrealmin
       The smallest positive normalized floating-point number is eta / (2 * eps)
 
       const predecessor_one = 1 - subrealmin  # prevfloat(one(T))
+                                              # = 1 - 2^(-precision)
       const phi = 2^(precision-1) + 1         # 2^fracbits + 1
         Emin <= -1 < p <= Emax, |fp| < 2^(Emax - p + 1), roundToZero OR roundDown
+        ufp(x) == ufp(|x|)        fl(ufp(fp)) = ufp(fp)
+        2^(precision - 1) * ufp(fp) <= ufp(fp) <= 2^precision* ufp(fp)
 
       function ufp(fp, p, 2)
          q = phi * abs(fp)
@@ -75,6 +83,26 @@ ufp(x::Real)  unit in the first place
                                       #   ufp(fp) / abs(fp) = (1 - predecessor_one) + (2^fracbits * (1 - predecessor_one))
                                       #   ufp(fp) / abs(fp) = (1 - predecessor_one) + (2^fracbits - (2^fracbits * predecessor_one)))
 
+# Unit in the rst place (ufp) in precision-p base-b page 5
+
+function ufp(fp)
+    feature(setround,0)            # rounding RoundToZero
+    p  = precision(fp)             # precision p
+                                   # flbeta(m, e) genertes m*2^e
+    p1 = 1 - subrealmin(flbeta)    # predecessor of 1
+    phi = flbeta(1,p-1) + 1        # beta^(p-1) + 1
+    q = phi*abs(f)                 # result in the normalized range
+    q - p1*q                       # ufp(fp)
+end
+
+function ulp(fp) in roundUp
+    fp = abs(fp)           # where abs(fp) < mrealmax, te largest representable floating-point number
+    succ(fp) - fp          # fp + subrealmin  # succesor(abs(fp)) == nextfloat(abs(fp))
+end
+     for fp >0,  ulp(fp) = succ(fp) - fp      
+     for fp <0,  ulp(fp) = pred(fp) - fp
+     for fp !=0, ulp(fp) = succ(abs(fp)) - abs(fp)
+                 ulp(fp) = aulp(abs(fp))            aulp(fp) = succ(fp) - fp
 
       eta = 1 / (2 * eps) 
       The distance from 1.0 to the next smaller floating-point number, is denoted by eps
