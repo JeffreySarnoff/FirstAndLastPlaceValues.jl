@@ -108,8 +108,6 @@ fast_ufp(x::Float64) = reinterpret(Float64, reinterpret(UInt64, x) & 0xfff000000
 fast_ufp(x::Float32) = reinterpret(Float32, reinterpret(UInt32, x) & 0xfff0_0000)
 fast_ufp(x::Float16) = reinterpret(Float16, reinterpret(UInt16, x) & 0xfff0)
 
-      
-
 #=
 eta is the smallest positive (nonzero, denormal)
 eta(T) = nextfloat(zero(T))
@@ -119,7 +117,6 @@ eta(::Type{T}) where {T<:AbstractFloat} = nextfloat(zero(T))
 eta(::Type{Float64}) = 5.0e-324
 eta(::Type{Float32}) = 1.0f-45
 eta(::Type{Float16}) = Float16(6.0e-8)
-
 
 #=
   epsilon (ε)
@@ -136,7 +133,6 @@ eta(::Type{Float16}) = Float16(6.0e-8)
 ε⁺(::Type{Float64}) = 2.220446049250313e-16
 ε⁺(::Type{Float32}) = 1.1920929f-7
 ε⁺(::Type{Float16}) = Float16(0.000977)
-
 
 #=
   relative rounding error (rre)
@@ -156,7 +152,6 @@ inv2rre(T)
 =#
 inv2rre(::Type{T}) where {T<:AbstractFloat} =
     inv(two(T))*rre(T) + one(T)
-
 
 #=
 ufp(x) unit in the first place of x
@@ -187,6 +182,5 @@ ulp(x::T) where {T<:AbstractFloat} = two(T) * ε⁻(T) * ufp(x)
 ulp(x::Float64) = 2.220446049250313e-16 * ufp(x)
 ulp(x::Float32) = 1.1920929f-7 * ufp(x)
 ulp(x::Float16) = Float16(0.000977) * ufp(x)
-
 
 end # FirstAndLastPlaceValues
