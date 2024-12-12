@@ -162,11 +162,23 @@ blp(x)  bit in the last place:              ulp(x) == 2.0^blp(x)
 bfp(x)  bit in the first place:             ufp(x) == 2.0^bfp(x)
 bls(x)  bit in the last significant place:  uls(x) == 2.0^bls(x)
 
+the relative rounding error unit (u)
+define u as half the distance between 1 and its successor
+u = 2^(1-precision) / 2 = 2^(1 - precision - 1) = 2^(1-1 - precision) = 2^(-precision)
 
-reu(T)  roundoff error unit === eps(T
-             2^(-precision)
-             ulp(1) / 2
-             
+    reu(T)  roundoff error unit === eps(T)
+    c is c[orrectly rounded]
+
+    where c is finite nonnegative and nextfloat(c) is finite and c in F
+      succ(1) = 1 + 2u
+      succ(c) >= max( c(1+2u), c+eta )
+      pred(c) >= min( c(1-2u), c-eta )
+
+    where c is finite negative and prevfloat(c) finite and c in F
+      pred(1) = 1 - u
+      pred(c) >= min( c(1+2u), c+eta )
+      succ(c) >= max( c(1-2u), c-eta )
+
     The relative rounding error unit (reu) , 
 
 =#
