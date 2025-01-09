@@ -26,6 +26,11 @@ Jean-Michel Muller
 Computing predecessor and successor in rounding to nearest
 Siegfried Rump, Paul Zimmermann, Sylvie Boldo, Guillaume Melquiond
 
+Accurate calculation of Euclidean Norms using Double-word arithmetic
+Vincent Lefèvre, Nicolas Louvet, Jean-Michel Muller, Joris Picot, Laurence Rideau.
+ACM Transactions on Mathematical Software, 2023, 49 (1), pp.1-34. 
+10.1145/3568672￿. hal-03482567v2
+
 On various ways to split a floating-point number
 Claude-Pierre Jeannerod, Jean-Michel Muller, Paul Zimmermann
 =#
